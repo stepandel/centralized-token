@@ -1,0 +1,20 @@
+service: backend-challenge
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  getAccount:
+    handler: src/handler.getAccount
+    events:
+      - http:
+          path: getAccount
+          method: post
+          cors: true
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
