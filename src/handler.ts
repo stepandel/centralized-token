@@ -1,13 +1,22 @@
 import keccak256 from "keccak256";
 import { getTable, Table } from "./db_connector";
-import { AddAccountRequest, AddAccountResponse } from "./models";
+import { AccountTableEntry, AddAccountRequest, AddAccountResponse, GetAccountRequest, GetAccountResponse, UserAccount } from "./models";
 import { lambdaWrap } from "./utils";
 
 
-async function getAccount(userEmail: string) {
-  console.log({userEmail});
+async function getAccount(r: GetAccountRequest): Promise<GetAccountResponse> {
+  let accountsTable = await getTable(Table.Accounts);
 
-  return "Success";
+  let id = createTableId(r.userEmail);
+  let result = (await accountsTable.findOne({ _id: id })) as AccountTableEntry;
+
+  if (result) {
+    let account: UserAccount = {...result};
+
+    return { account };
+  }
+
+  throw new Error("User not found");
 }
 
 function createTableId(data: any): string {
@@ -17,7 +26,7 @@ function createTableId(data: any): string {
 async function addAccount(r: AddAccountRequest): Promise<AddAccountResponse> {
   let accountsTable = await getTable(Table.Accounts);
 
-  let accountTableEntry = {
+  let accountTableEntry: AccountTableEntry = {
     _id: createTableId(r.account.userEmail) as any,
     userEmail: r.account.userEmail,
     status: r.account.status,
