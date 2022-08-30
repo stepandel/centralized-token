@@ -15,6 +15,14 @@ functions:
           method: post
           cors: true
 
+  addAccount:
+    handler: src/handler.addAccount
+    events:
+      - http:
+          path: addAccount
+          method: post
+          cors: true
+
 plugins:
   - serverless-plugin-typescript
   - serverless-offline

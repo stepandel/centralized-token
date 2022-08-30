@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "es5",
+    "outDir": ".build",
+    "moduleResolution": "node",
+    "lib": ["es2015"],
+    "rootDir": "./src"
+  },
+  "include": ["src/*.ts", "serverless.ts", "handler.ts"],
+  "exclude": ["node_modules"],
+  "baseUrl": ".",
+}
