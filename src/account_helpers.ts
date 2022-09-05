@@ -38,6 +38,7 @@ export async function addUser(user: UserAccount): Promise<string> {
 export async function loadUsers(users: UserAccount[]) {
   let accountsTable = await getTable(Table.Accounts);
 
+  let returnPromise: Promise<any>[] = [];
   // Split into batches of 200
   while (users.length > 0) {
     let usersSplice = users.splice(0, 200);
@@ -48,8 +49,10 @@ export async function loadUsers(users: UserAccount[]) {
         balance: 0,
       }
     })
-    await accountsTable.insertMany(userAccounts);
+    returnPromise.push(accountsTable.insertMany(userAccounts));
   }
+
+  return Promise.all(returnPromise);
 }
 
 export async function getUser(userEmail: string): Promise<UserAccount> {
