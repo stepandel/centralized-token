@@ -1,4 +1,4 @@
-import { addUser, getAccountBalance, getUser, isLockedAccount, loadUsers } from "./account_helpers";
+import { createUser, getAccountBalance, getUser, isLockedAccount, loadUsers } from "./account_helpers";
 import { AddAccountRequest, AddAccountResponse, GetAccountRequest, GetAccountResponse, MakeTransactionRequest, MakeTransactionResponse, Transaction, UserAccount } from "./models";
 import { createTransaction, creditOrDebitAccount } from "./transaction_helpers";
 import { lambdaWrap } from "./utils";
@@ -9,15 +9,7 @@ async function getAccount(r: GetAccountRequest): Promise<GetAccountResponse> {
 }
 
 async function addAccount(r: AddAccountRequest): Promise<AddAccountResponse> {
-  let userAccount: UserAccount = {
-    userEmail: r.userEmail,
-    status: r.status,
-    createdAt: new Date().toISOString(),
-  }
-
-  console.log({userAccount});
-
-  return { accountId: await addUser(userAccount) };
+  return { accountId: await createUser(r.userEmail, r.status) };
 }
 
 async function loadAccounts(accounts: UserAccount[]) {

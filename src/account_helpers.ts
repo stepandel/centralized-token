@@ -6,6 +6,16 @@ function createTableId(data: any): string {
   return keccak256(data).toString('hex');
 }
 
+export async function createUser(userEmail: string, status: "active" | "locked"): Promise<string> {
+  let userAccount: UserAccount = {
+    userEmail,
+    status,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  }
+  return addUser(userAccount);
+}
+
 export async function addUser(user: UserAccount): Promise<string> {
   let accountsTable = await getTable(Table.Accounts);
 
@@ -14,6 +24,7 @@ export async function addUser(user: UserAccount): Promise<string> {
     userEmail: user.userEmail,
     status: user.status,
     createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
     balance: 0,
   }
 
