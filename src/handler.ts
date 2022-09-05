@@ -1,6 +1,6 @@
 import { createUser, getAccountBalance, getUser, isLockedAccount, loadUsers, setStatus } from "./account_helpers";
 import { AddAccountRequest, AddAccountResponse, GetAccountRequest, GetAccountResponse, MakeTransactionRequest, MakeTransactionResponse, Transaction, UpdateStatusRequest, UserAccount } from "./models";
-import { createTransaction, creditOrDebitAccount } from "./transaction_helpers";
+import { createTransaction, createTransactions, creditOrDebitAccount } from "./transaction_helpers";
 import { lambdaWrap } from "./utils";
 
 
@@ -15,10 +15,6 @@ async function addAccount(r: AddAccountRequest): Promise<AddAccountResponse> {
 async function updateStatus(r: UpdateStatusRequest): Promise<{}> {
   await setStatus(r.userEmail, r.status);
   return { success: true }
-}
-
-async function loadAccounts(accounts: UserAccount[]) {
-  return loadUsers(accounts);
 }
 
 async function makeTransaction(r: MakeTransactionRequest): Promise<MakeTransactionResponse> {
@@ -43,8 +39,16 @@ async function makeTransaction(r: MakeTransactionRequest): Promise<MakeTransacti
 }
 
 // Test function
+async function loadAccounts(accounts: UserAccount[]) {
+  return loadUsers(accounts);
+}
+
 async function loadTransaction(transaction: Transaction) {
   return createTransaction(transaction);
+}
+
+async function loadTransactions(transactions: Transaction[]) {
+  return createTransactions(transactions);
 }
 
 
@@ -52,7 +56,8 @@ module.exports = {
   getAccount: lambdaWrap(getAccount),
   addAccount: lambdaWrap(addAccount),
   updateStatus: lambdaWrap(updateStatus),
-  loadAccounts: lambdaWrap(loadAccounts),
   makeTransaction: lambdaWrap(makeTransaction),
+  loadAccounts: lambdaWrap(loadAccounts),
   loadTransaction: lambdaWrap(loadTransaction),
+  loadTransactions: lambdaWrap(loadTransactions),
 }

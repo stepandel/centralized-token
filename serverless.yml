@@ -31,14 +31,6 @@ functions:
           method: post
           cors: true
 
-  loadAccounts:
-    handler: src/handler.loadAccounts
-    events:
-      - http:
-          path: loadAccounts
-          method: post
-          cors: true
-
   makeTransaction:
     handler: src/handler.makeTransaction
     events:
@@ -47,11 +39,27 @@ functions:
           method: post
           cors: true
 
+  loadAccounts:
+    handler: src/handler.loadAccounts
+    events:
+      - http:
+          path: loadAccounts
+          method: post
+          cors: true
+
   loadTransaction:
     handler: src/handler.loadTransaction
     events:
       - http:
           path: loadTransaction
+          method: post
+          cors: true
+
+  loadTransactions:
+    handler: src/handler.loadTransactions
+    events:
+      - http:
+          path: loadTransactions
           method: post
           cors: true
 

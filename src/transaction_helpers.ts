@@ -57,3 +57,27 @@ export async function createTransaction(transaction: Transaction) {
   });
 
 }
+
+export async function createTransactions(transactions: Transaction[]) {
+  let accountsTable = await getTable(Table.Accounts);
+
+  transactions.map( transaction => {
+    // Increment user balance
+    let accountsId = createTableId(transaction.userEmail);
+    accountsTable.updateOne(
+      { _id: accountsId },
+      { $inc: { balance: transaction.type == "receive" ? transaction.amount : -transaction.amount } },
+    );
+  });
+
+  // Add transaction record
+  let transactionsTable = await getTable(Table.Transactions);
+  // Split into batches of 200
+  let returnPromise: Promise<any>[] = [];
+  while (transactions.length > 0) {
+    let transactionsSplice = transactions.splice(0, 200);
+    returnPromise.push(transactionsTable.insertMany(transactionsSplice));
+  }
+
+  return Promise.all(returnPromise);
+}
