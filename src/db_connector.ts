@@ -24,6 +24,7 @@ export const getClient = async () => {
 
 export enum Table {
   Accounts =  "accounts",
+  Transactions = "transactions",
 }
 
 export const getTable = async (tableName: Table): Promise<Collection<Document>> => {

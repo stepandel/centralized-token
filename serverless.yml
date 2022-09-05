@@ -23,6 +23,22 @@ functions:
           method: post
           cors: true
 
+  makeTransaction:
+    handler: src/handler.makeTransaction
+    events:
+      - http:
+          path: makeTransaction
+          method: post
+          cors: true
+
+  loadTransaction:
+    handler: src/handler.loadTransaction
+    events:
+      - http:
+          path: loadTransaction
+          method: post
+          cors: true
+
 plugins:
   - serverless-plugin-typescript
   - serverless-offline

@@ -15,6 +15,7 @@ export async function addUser(user: UserAccount): Promise<string> {
     status: user.status,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
+    balance: 0,
   }
 
   let result = await accountsTable.insertOne(accountTableEntry);
@@ -37,4 +38,31 @@ export async function getUser(userEmail: string): Promise<UserAccount> {
   }
 
   throw new Error("User not found");
+}
+
+export async function isLockedAccount(userEmail: string): Promise<boolean> {
+  let accountsTable = await getTable(Table.Accounts);
+
+  let id = createTableId(userEmail);
+  let result = (await accountsTable.findOne({ _id: id })) as AccountTableEntry;
+
+  if (result) {
+    return result.status == "locked";
+  }
+
+  // if no account found -- return true
+  return true;
+}
+
+export async function getAccountBalance(userEmail: string): Promise<number> {
+  let accountsTable = await getTable(Table.Accounts);
+
+  let id = createTableId(userEmail);
+  let result = (await accountsTable.findOne({ _id: id })) as AccountTableEntry;
+
+  if (result) {
+    return result.balance;
+  }
+
+  throw new Error("Account not found");
 }
