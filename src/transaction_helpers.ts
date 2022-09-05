@@ -15,7 +15,10 @@ export async function creditOrDebitAccount(userEmail: string, amount: number, cr
 
   let updateResult = await accountsTable.updateOne(
     { _id: accountsId, balance: { $gt: -amount - 1 } },
-    { $inc: { balance: credit ? -amount : amount } },
+    { 
+      $inc: { balance: credit ? -amount : amount },
+      $set: { updatedAt: new Date().toISOString() },
+    },
   )
 
   if (updateResult.modifiedCount < 1) {
