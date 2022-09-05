@@ -1,4 +1,4 @@
-import { addUser, getAccountBalance, getUser, isLockedAccount } from "./account_helpers";
+import { addUser, getAccountBalance, getUser, isLockedAccount, loadUsers } from "./account_helpers";
 import { AddAccountRequest, AddAccountResponse, GetAccountRequest, GetAccountResponse, MakeTransactionRequest, MakeTransactionResponse, Transaction, UserAccount } from "./models";
 import { createTransaction, creditOrDebitAccount } from "./transaction_helpers";
 import { lambdaWrap } from "./utils";
@@ -20,6 +20,10 @@ async function addAccount(r: AddAccountRequest): Promise<AddAccountResponse> {
   return { accountId: await addUser(userAccount) };
 }
 
+async function loadAccounts(accounts: UserAccount[]) {
+  return loadUsers(accounts);
+}
+
 async function makeTransaction(r: MakeTransactionRequest): Promise<MakeTransactionResponse> {
   // Check if either account is locked
   let isLocked = (await isLockedAccount(r.to_email)) && (await isLockedAccount(r.from_email));
@@ -39,11 +43,6 @@ async function makeTransaction(r: MakeTransactionRequest): Promise<MakeTransacti
 
 // Test function
 async function loadTransaction(transaction: Transaction) {
-
-  console.log("Called function");
-
-  console.log(transaction.userEmail);
-
   return createTransaction(transaction);
 }
 
@@ -51,6 +50,7 @@ async function loadTransaction(transaction: Transaction) {
 module.exports = {
   getAccount: lambdaWrap(getAccount),
   addAccount: lambdaWrap(addAccount),
+  loadAccounts: lambdaWrap(loadAccounts),
   makeTransaction: lambdaWrap(makeTransaction),
   loadTransaction: lambdaWrap(loadTransaction),
 }

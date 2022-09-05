@@ -24,6 +24,23 @@ export async function addUser(user: UserAccount): Promise<string> {
   return result.insertedId.toString();
 }
 
+export async function loadUsers(users: UserAccount[]) {
+  let accountsTable = await getTable(Table.Accounts);
+
+  // Split into batches of 200
+  while (users.length > 0) {
+    let usersSplice = users.splice(0, 200);
+    let userAccounts: AccountTableEntry[] = usersSplice.map( user => {
+      return {
+        _id: createTableId(user.userEmail),
+        ...user,
+        balance: 0,
+      }
+    })
+    await accountsTable.insertMany(userAccounts);
+  }
+}
+
 export async function getUser(userEmail: string): Promise<UserAccount> {
   let accountsTable = await getTable(Table.Accounts);
 

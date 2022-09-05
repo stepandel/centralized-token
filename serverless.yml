@@ -23,6 +23,14 @@ functions:
           method: post
           cors: true
 
+  loadAccounts:
+    handler: src/handler.loadAccounts
+    events:
+      - http:
+          path: loadAccounts
+          method: post
+          cors: true
+
   makeTransaction:
     handler: src/handler.makeTransaction
     events:
