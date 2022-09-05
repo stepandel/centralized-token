@@ -23,6 +23,14 @@ functions:
           method: post
           cors: true
 
+  updateStatus:
+    handler: src/handler.updateStatus
+    events:
+      - http:
+          path: updateStatus
+          method: post
+          cors: true
+
   loadAccounts:
     handler: src/handler.loadAccounts
     events:

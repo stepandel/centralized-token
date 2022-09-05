@@ -67,6 +67,16 @@ export async function getUser(userEmail: string): Promise<UserAccount> {
   throw new Error("User not found");
 }
 
+export async function setStatus(userEmail: string, status: "active" | "locked") {
+  let accountsTable = await getTable(Table.Accounts);
+
+  let id = createTableId(userEmail);
+  return accountsTable.updateOne(
+    { _id: id },
+    { $set: { status: status } },
+  )
+}
+
 export async function isLockedAccount(userEmail: string): Promise<boolean> {
   let accountsTable = await getTable(Table.Accounts);
 

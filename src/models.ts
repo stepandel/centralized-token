@@ -33,6 +33,11 @@ export type GetAccountResponse = {
   account: UserAccount;
 }
 
+export type UpdateStatusRequest = {
+  userEmail: string;
+  status: "active" | "locked";
+}
+
 export type TransactionTableEntry = {
   _id: ObjectId;
   userEmail: string;
