@@ -1,4 +1,4 @@
-import { addUser, getUser } from "./helpers";
+import { addUser, getUser } from "./account_helpers";
 import { AddAccountRequest, AddAccountResponse, GetAccountRequest, GetAccountResponse } from "./models";
 import { lambdaWrap } from "./utils";
 

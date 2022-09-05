@@ -10,7 +10,7 @@ export async function addUser(user: UserAccount): Promise<string> {
   let accountsTable = await getTable(Table.Accounts);
 
   let accountTableEntry: AccountTableEntry = {
-    _id: createTableId(user.userEmail) as any,
+    _id: createTableId(user.userEmail),
     userEmail: user.userEmail,
     status: user.status,
     createdAt: user.createdAt,
