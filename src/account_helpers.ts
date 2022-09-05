@@ -83,6 +83,8 @@ export async function isLockedAccount(userEmail: string): Promise<boolean> {
   let id = createTableId(userEmail);
   let result = (await accountsTable.findOne({ _id: id })) as AccountTableEntry;
 
+  console.log({result})
+
   if (result) {
     return result.status == "locked";
   }

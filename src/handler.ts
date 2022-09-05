@@ -23,15 +23,19 @@ async function loadAccounts(accounts: UserAccount[]) {
 
 async function makeTransaction(r: MakeTransactionRequest): Promise<MakeTransactionResponse> {
   // Check if either account is locked
-  let isLocked = (await isLockedAccount(r.to_email)) && (await isLockedAccount(r.from_email));
+  let isLocked = (await isLockedAccount(r.to_email)) || (await isLockedAccount(r.from_email));
 
-  if (!isLocked) {
-    // Subtract from balance if possible
-    let creditResult = await creditOrDebitAccount(r.from_email, r.amount, true);
-    if (creditResult) {
-      // Add to balance
-      await creditOrDebitAccount(r.to_email, r.amount, false);
-    }
+  console.log({isLocked});
+
+  if (isLocked) {
+    throw new Error("Can't perform transaction. One of the accounts is locked");
+  }
+  
+  // Subtract from balance if possible
+  let creditResult = await creditOrDebitAccount(r.from_email, r.amount, true);
+  if (creditResult) {
+    // Add to balance
+    await creditOrDebitAccount(r.to_email, r.amount, false);
   }
 
   return { sender_balance: await getAccountBalance(r.from_email), receiver_balance: await getAccountBalance(r.to_email) };
