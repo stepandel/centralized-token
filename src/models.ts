@@ -1,7 +1,8 @@
 import { ObjectId } from "mongodb";
 
 export type AddAccountRequest = {
-  account: UserAccount;
+  userEmail: string,
+  status: "active" | "locked",
 }
 
 export type AddAccountResponse = {
@@ -12,7 +13,7 @@ export type UserAccount = {
   userEmail: string;
   status: "active" | "locked";
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export type AccountTableEntry = {
@@ -20,7 +21,7 @@ export type AccountTableEntry = {
   userEmail: string;
   status: "active" | "locked";
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   balance: number;
 }
 

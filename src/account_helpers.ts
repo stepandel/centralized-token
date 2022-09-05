@@ -14,7 +14,6 @@ export async function addUser(user: UserAccount): Promise<string> {
     userEmail: user.userEmail,
     status: user.status,
     createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
     balance: 0,
   }
 
