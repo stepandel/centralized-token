@@ -73,7 +73,7 @@ export async function setStatus(userEmail: string, status: "active" | "locked") 
   let id = createTableId(userEmail);
   return accountsTable.updateOne(
     { _id: id },
-    { $set: { status: status } },
+    { $set: { status: status, updatedAt: new Date().toISOString() } },
   )
 }
 
