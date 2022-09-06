@@ -38,6 +38,9 @@ export async function addUser(user: UserAccount): Promise<string> {
 export async function loadUsers(users: UserAccount[]) {
   let accountsTable = await getTable(Table.Accounts);
 
+  // Remove duplicates
+  users = removeDuplicates(users);
+
   let returnPromise: Promise<any>[] = [];
   // Split into batches of 200
   while (users.length > 0) {
@@ -53,6 +56,14 @@ export async function loadUsers(users: UserAccount[]) {
   }
 
   return Promise.all(returnPromise);
+}
+
+function removeDuplicates(accounts: UserAccount[]): UserAccount[] {
+  let hashMap: Map<string, boolean> = new Map();
+  return accounts.filter( account => {
+    let id = createTableId(account.userEmail);
+    return hashMap.get(id) ? false : (hashMap.set(id, true));
+  });
 }
 
 export async function getUser(userEmail: string): Promise<UserAccount> {
