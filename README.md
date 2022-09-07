@@ -16,3 +16,6 @@
 
 2. Start dserverless offline
    `sls offline`
+
+3. Run tests
+   `yarn run test`
